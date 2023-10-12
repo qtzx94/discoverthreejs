@@ -5,6 +5,7 @@ import { createScene } from "./components/scene.js";
 
 import { createRenderer } from "./systems/renderer.js";
 import { Resizer } from "./systems/Resizer.js";
+import { Loop } from "./systems/Loop.js";
 
 /**
  * 设置相机、场景和渲染器，它们都需要在构造函数中创建，然后在 World.render 方法中访问。
@@ -20,6 +21,7 @@ import { Resizer } from "./systems/Resizer.js";
 let camera;
 let scene;
 let renderer;
+let loop;
 
 class World {
   // 1、create an instance of the World app
@@ -27,23 +29,35 @@ class World {
     camera = createCamera();
     scene = createScene();
     renderer = createRenderer();
+    loop = new Loop(camera, scene, renderer);
     // 将画布添加到容器中
     container.append(renderer.domElement);
 
     const cube = createCube();
-    const lights = createLights();
+    const light = createLights();
 
-    scene.add(cube, lights);
+    loop.updatables.push(cube);
+    loop.updatables.push(camera);
+
+    scene.add(cube, light);
 
     const resizer = new Resizer(container, camera, renderer);
-    resizer.onResize = () => {
-      this.render();
-    };
+    // resizer.onResize = () => {
+    //   this.render();
+    // };
   }
 
   // 2、render the scene
   render() {
     renderer.render(scene, camera);
+  }
+
+  start() {
+    loop.start();
+  }
+
+  stop() {
+    loop.stop();
   }
 }
 

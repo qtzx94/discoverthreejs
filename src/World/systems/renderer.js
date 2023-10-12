@@ -10,6 +10,11 @@ function createRenderer() {
   // turn on the physically correct lighting model
   renderer.physicallyCorrectLights = true;
 
+  // start the loop
+  renderer.setAnimationLoop(() => {
+    renderer.render(scene, camera);
+  });
+
   return renderer;
 }
 

@@ -9,7 +9,7 @@ function main() {
   const world = new World(container);
 
   // render the scene
-  world.render();
+  world.start();
 }
 
 // call main to start the app
