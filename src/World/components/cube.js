@@ -7,13 +7,27 @@ import {
   Mesh,
   MeshStandardMaterial,
   MathUtils,
+  TextureLoader,
 } from "https://cdn.skypack.dev/three@0.132.2";
+
+function createMaterial() {
+  // create a texture material
+  const textureLoader = new TextureLoader();
+
+  // load a texture
+  const texture = textureLoader.load("/assets/textures/uv-test-col.png");
+
+  // create a "standard" material
+  const material = new MeshStandardMaterial({ map: texture });
+
+  return material;
+}
 
 function createCube() {
   // create a geometry
   const geometry = new BoxBufferGeometry(2, 2, 2);
 
-  const material = new MeshStandardMaterial({ color: "papayawhip" });
+  const material = createMaterial();
 
   // create a Mesh containing the geometry and material
   const cube = new Mesh(geometry, material);

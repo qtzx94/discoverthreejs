@@ -3,6 +3,7 @@ import { createCube } from "./components/cube.js";
 import { createLights } from "./components/lights.js";
 import { createScene } from "./components/scene.js";
 
+import { createControls } from "./systems/controls.js";
 import { createRenderer } from "./systems/renderer.js";
 import { Resizer } from "./systems/Resizer.js";
 import { Loop } from "./systems/Loop.js";
@@ -29,17 +30,25 @@ class World {
     camera = createCamera();
     scene = createScene();
     renderer = createRenderer();
+
     loop = new Loop(camera, scene, renderer);
     // 将画布添加到容器中
     container.append(renderer.domElement);
 
+    const controls = createControls(camera, renderer.domElement);
+
     const cube = createCube();
-    const light = createLights();
+    const { ambientLight, mainLight } = createLights();
 
-    loop.updatables.push(cube);
-    loop.updatables.push(camera);
+    // loop.updatables.push(cube);
+    // loop.updatables.push(camera);
+    loop.updatables.push(controls);
 
-    scene.add(cube, light);
+    scene.add(cube, ambientLight, mainLight);
+
+    // controls.addEventListener("change", () => {
+    //   this.render();
+    // });
 
     const resizer = new Resizer(container, camera, renderer);
     // resizer.onResize = () => {

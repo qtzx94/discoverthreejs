@@ -10,6 +10,8 @@ function main() {
 
   // render the scene
   world.start();
+
+  // world.render();
 }
 
 // call main to start the app
