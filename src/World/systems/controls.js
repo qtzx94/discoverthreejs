@@ -11,7 +11,7 @@ function createControls(camera, canvas) {
 
   //   controls.listenToKeyEvents(window); // 监听按键事件并使用箭头键平移相机
 
-  controls.autoRotate = true; // 将使相机自动围绕.target旋转
+  controls.autoRotate = false; // 将使相机自动围绕.target旋转
   controls.autoRotateSpeed = 1;
 
   controls.tick = () => controls.update();
