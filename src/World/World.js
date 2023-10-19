@@ -1,7 +1,11 @@
 import { createCamera } from "./components/camera.js";
-import { createMeshGroup } from "./components/meshGroup.js";
+
+import { createAxesHelper, createGridHelper } from "./components/helpers.js";
+
 import { createLights } from "./components/lights.js";
 import { createScene } from "./components/scene.js";
+
+import { Train } from "./components/Train/Train.js";
 
 import { createControls } from "./systems/controls.js";
 import { createRenderer } from "./systems/renderer.js";
@@ -36,15 +40,16 @@ class World {
     container.append(renderer.domElement);
 
     const controls = createControls(camera, renderer.domElement);
-
-    const meshGroup = createMeshGroup();
     const { ambientLight, mainLight } = createLights();
+    const train = new Train();
 
-    loop.updatables.push(controls, meshGroup);
+    loop.updatables.push(controls, train);
 
-    scene.add(meshGroup, ambientLight, mainLight);
+    scene.add(ambientLight, mainLight, train);
 
     const resizer = new Resizer(container, camera, renderer);
+
+    scene.add(createAxesHelper(), createGridHelper());
   }
 
   // 2、render the scene
