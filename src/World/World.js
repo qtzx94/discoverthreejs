@@ -1,11 +1,18 @@
+/*
+ * @Author: zhangbei zhangbei@myhexin.com
+ * @Date: 2023-10-09 19:03:15
+ * @LastEditors: zhangbei zhangbei@myhexin.com
+ * @LastEditTime: 2023-10-23 21:19:42
+ * @FilePath: /discoverthreejs/src/World/World.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+import { loadBirds } from "./components/birds/birds.js";
 import { createCamera } from "./components/camera.js";
 
 import { createAxesHelper, createGridHelper } from "./components/helpers.js";
 
 import { createLights } from "./components/lights.js";
 import { createScene } from "./components/scene.js";
-
-import { Train } from "./components/Train/Train.js";
 
 import { createControls } from "./systems/controls.js";
 import { createRenderer } from "./systems/renderer.js";
@@ -24,6 +31,7 @@ import { Loop } from "./systems/Loop.js";
  */
 
 let camera;
+let controls;
 let scene;
 let renderer;
 let loop;
@@ -39,17 +47,28 @@ class World {
     // 将画布添加到容器中
     container.append(renderer.domElement);
 
-    const controls = createControls(camera, renderer.domElement);
+    controls = createControls(camera, renderer.domElement);
+
     const { ambientLight, mainLight } = createLights();
-    const train = new Train();
 
-    loop.updatables.push(controls, train);
+    loop.updatables.push(controls);
 
-    scene.add(ambientLight, mainLight, train);
+    scene.add(ambientLight, mainLight);
 
     const resizer = new Resizer(container, camera, renderer);
 
-    scene.add(createAxesHelper(), createGridHelper());
+    // scene.add(createAxesHelper(), createGridHelper());
+  }
+
+  // asynchronous setup here load bird models
+  async init() {
+    const { parrot, flamingo, stork } = await loadBirds();
+
+    controls.target.copy(parrot.position);
+
+    loop.updatables.push(parrot, flamingo, stork);
+
+    scene.add(parrot, flamingo, stork);
   }
 
   // 2、render the scene
